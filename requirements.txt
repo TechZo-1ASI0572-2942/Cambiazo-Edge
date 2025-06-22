@@ -2,3 +2,4 @@ Flask==3.1.1
 peewee==3.18.1
 requests==2.32.3
 python-dateutil==2.9.0
+gunicorn==23.0.0
