@@ -2,7 +2,7 @@
 
 from flask import Blueprint, request, jsonify
 from lockers.application.services import LockerApplicationService
-from lockers.domain.stateEnum import StateEnum
+from lockers.domain.enums.stateEnum import StateEnum
 from datetime import datetime
 
 locker_api = Blueprint("locker_api", __name__)
@@ -31,7 +31,8 @@ def create_locker_record():
             user_retrieve_id=data["user_retrieve_id"],
             pin_deposit=data["pin_deposit"],
             pin_retrieve=data["pin_retrieve"],
-            state=data.get("state", StateEnum.EMPTY.value),
+            state_exchange=data['state_exchange'],
+            state=data.get("state", StateEnum.AVAILABLE.value),
             last_synced=data.get("last_synced")
         )
 
@@ -43,6 +44,7 @@ def create_locker_record():
             "user_retrieve_id": locker.user_retrieve_id,
             "pin_deposit": locker.pin_deposit,
             "pin_retrieve": locker.pin_retrieve,
+            "state_exchange": locker.state_exchange,
             "state": locker.state,
             "last_synced": locker.last_synced.isoformat() if locker.last_synced else None
         }), 201
@@ -74,6 +76,7 @@ def update_locker_record(locker_id):
             "user_retrieve_id": updated_locker.user_retrieve_id,
             "pin_deposit": updated_locker.pin_deposit,
             "pin_retrieve": updated_locker.pin_retrieve,
+            "state_exchange": updated_locker.state_exchange,
             "state": updated_locker.state,
             "last_synced": updated_locker.last_synced
         }), 200
@@ -98,6 +101,7 @@ def get_locker_record(locker_id):
             "user_retrieve_id": locker.user_retrieve_id,
             "pin_deposit": locker.pin_deposit,
             "pin_retrieve": locker.pin_retrieve,
+            "state_exchange": locker.state_exchange,
             "state": locker.state,
             "last_synced": last_synced
         }), 200

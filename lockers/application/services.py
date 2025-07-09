@@ -3,7 +3,7 @@
 from lockers.domain.entities import Locker
 from lockers.domain.services import LockerRecordService
 from lockers.infrastructure.repositories import LockerRepository
-from lockers.domain.stateEnum import StateEnum
+from lockers.domain.enums.stateEnum import StateEnum
 
 
 class LockerApplicationService:
@@ -22,7 +22,8 @@ class LockerApplicationService:
         user_retrieve_id: int,
         pin_deposit: str,
         pin_retrieve: str,
-        state: str = StateEnum.EMPTY,
+        state_exchange: str,
+        state: str = StateEnum.AVAILABLE,
         last_synced: str | None = None
     ) -> Locker:
         """Create and persist a locker record.
@@ -34,6 +35,7 @@ class LockerApplicationService:
             user_retrieve_id (int): ID of the user expected to retrieve.
             pin_deposit (str): Deposit PIN code.
             pin_retrieve (str): Retrieve PIN code.
+            state_exchange (str): State of the locker in the exchange system (e.g., 'empty', 'full', 'delivered').
             state (str): Initial state. Defaults to "waiting_deposit".
             last_synced (str | None): Optional last sync timestamp.
 
@@ -50,6 +52,7 @@ class LockerApplicationService:
             user_retrieve_id=user_retrieve_id,
             pin_deposit=pin_deposit,
             pin_retrieve=pin_retrieve,
+            state_exchange=state_exchange,
             state=state,
             last_synced=last_synced
         )

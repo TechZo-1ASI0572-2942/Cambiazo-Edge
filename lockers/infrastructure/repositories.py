@@ -30,6 +30,7 @@ class LockerRepository:
             user_retrieve_id=locker.user_retrieve_id,
             pin_deposit=locker.pin_deposit,
             pin_retrieve=locker.pin_retrieve,
+            state_exchange=locker.state_exchange,
             state=locker.state,
             last_synced=locker.last_synced
         )
@@ -40,6 +41,7 @@ class LockerRepository:
             user_retrieve_id=record.user_retrieve_id,
             pin_deposit=record.pin_deposit,
             pin_retrieve=record.pin_retrieve,
+            state_exchange=record.state_exchange,
             state=record.state,
             last_synced=record.last_synced,
             id=record.id
@@ -70,6 +72,7 @@ class LockerRepository:
             user_retrieve_id=updated_record.user_retrieve_id,
             pin_deposit=updated_record.pin_deposit,
             pin_retrieve=updated_record.pin_retrieve,
+            state_exchange=updated_record.state_exchange,
             state=updated_record.state,
             last_synced=updated_record.last_synced
         )
@@ -95,6 +98,7 @@ class LockerRepository:
             user_retrieve_id=updated_record.user_retrieve_id,
             pin_deposit=updated_record.pin_deposit,
             pin_retrieve=updated_record.pin_retrieve,
+            state_exchange=updated_record.state_exchange,
             state=updated_record.state,
             last_synced=updated_record.last_synced
         )

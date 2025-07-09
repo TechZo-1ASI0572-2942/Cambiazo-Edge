@@ -22,6 +22,7 @@ class Locker(Model):
     user_retrieve_id = IntegerField()
     pin_deposit = CharField()
     pin_retrieve = CharField()
+    state_exchange = CharField()
     state = CharField()
     last_synced = DateTimeField(null=True)
 

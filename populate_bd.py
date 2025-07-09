@@ -4,9 +4,9 @@ import requests
 url = "http://127.0.0.1:5000/api/v1/lockers/records"
 
 # Número de lockers a crear
-numero_lockers = 20
+numero_lockers = 100
 
-for i in range(1, numero_lockers + 1):
+for i in range(51, numero_lockers + 1):
     locker_id = f"A{i:02d}"  # Formato: A01, A02, etc.
     data = {
         "locker_id": locker_id,
@@ -15,7 +15,8 @@ for i in range(1, numero_lockers + 1):
         "user_retrieve_id": 0,
         "pin_deposit": "0000",  # En lugar de "", se asigna un PIN por defecto
         "pin_retrieve": "0000", # En lugar de "", se asigna un PIN por defecto
-        "state": "EMPTY"
+        "state_exchange": "EMPTY",  # Estado inicial del locker en el sistema de intercambio
+        "state": "AVAILABLE"
         # "last_synced" se omite, quedando en null
     }
     response = requests.post(url, json=data)

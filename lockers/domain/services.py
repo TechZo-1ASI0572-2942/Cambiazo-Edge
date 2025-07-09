@@ -2,7 +2,7 @@
 
 from datetime import datetime, timezone
 from dateutil.parser import parse
-from lockers.domain.stateEnum import StateEnum
+from lockers.domain.enums.stateEnum import StateEnum
 
 from lockers.domain.entities import Locker
 
@@ -22,7 +22,8 @@ class LockerRecordService:
         user_retrieve_id: int,
         pin_deposit: str,
         pin_retrieve: str,
-        state: str = StateEnum.EMPTY,
+        state_exchange: str,
+        state: str = StateEnum.AVAILABLE,
         last_synced: str | None = None
     ) -> Locker:
         """Create a new locker record.
@@ -34,6 +35,7 @@ class LockerRecordService:
             user_retrieve_id (int): ID of the retrieve user.
             pin_deposit (str): PIN for deposit access.
             pin_retrieve (str): PIN for retrieve access.
+            state_exchange (str): State of the locker in the exchange system (e.g., 'empty', 'full', 'delivered').
             state (str): Initial state of the locker.
             last_synced (str | None): Last sync timestamp (ISO 8601).
 
@@ -63,6 +65,7 @@ class LockerRecordService:
             user_retrieve_id=user_retrieve_id,
             pin_deposit=pin_deposit,
             pin_retrieve=pin_retrieve,
+            state_exchange=state_exchange,
             state=state,
             last_synced=parsed_last_synced
         )
