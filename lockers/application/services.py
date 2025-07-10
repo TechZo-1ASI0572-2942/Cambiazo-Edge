@@ -1,5 +1,5 @@
 """Application services for the Locker-bounded context."""
-
+import requests
 from lockers.domain.entities import Locker
 from lockers.domain.services import LockerRecordService
 from lockers.infrastructure.repositories import LockerRepository
@@ -13,6 +13,7 @@ class LockerApplicationService:
         """Initialize the LockerApplicationService."""
         self.locker_repository = LockerRepository()
         self.locker_service = LockerRecordService()
+        self.external_api_url = "https://cambiazo-backend-bjdkd7hhgqa8gygw.westus-01.azurewebsites.net/api/v2/exchange-lockers"
 
     def create_locker_record(
         self,
@@ -70,7 +71,51 @@ class LockerApplicationService:
         Returns:
             Locker: Locker actualizado.
         """
-        return self.locker_repository.update(locker_id, kwargs)
+
+        update_locker = self.locker_repository.update(locker_id, kwargs)
+        self._sync_with_external_api(update_locker)
+
+        return update_locker
+
+    def _sync_with_external_api(self, locker: Locker):
+        """
+        Envía los datos del locker a la API externa mediante PUT.
+        
+        Args:
+            locker: Entidad del locker actualizado.
+        """
+        try:
+            # Preparar los datos para enviar
+            payload = {
+                "exchangeId": locker.exchange_id,
+                "lockerId": locker.locker_id,
+                "state": locker.state,
+                "stateExchange": locker.state_exchange
+            }
+            print(f"Sincronizando locker {locker.locker_id} con API externa: {payload}")
+            
+            # Hacer la petición PUT a la API externa
+            url = f"{self.external_api_url}/{locker.locker_id}"  # Usar locker.locker_id en lugar de locker.id
+            print(f"URL de la API externa: {url}")
+            response = requests.put(
+                f"{self.external_api_url}/{locker.locker_id}",  # Usar locker.id en lugar de locker.locker_id
+                json=payload,
+                headers={"Content-Type": "application/json"},
+                timeout=10  # Timeout de 10 segundos
+            )
+            
+            # Log del resultado (opcional)
+            if response.status_code == 200:
+                print(f"Locker {locker.locker_id} sincronizado exitosamente con API externa")
+            else:
+                print(f"Error al sincronizar locker {locker.locker_id}: {response.status_code}")
+                
+        except requests.exceptions.RequestException as e:
+            # Manejar errores de conexión sin afectar la operación principal
+            print(f"Error de conexión con API externa para locker {locker.locker_id}: {e}")
+        except Exception as e:
+            print(f"Error inesperado al sincronizar con API externa: {e}")
+
 
     def get_locker_record(self, locker_id: str):
         """
